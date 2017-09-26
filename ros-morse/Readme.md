@@ -1,4 +1,8 @@
 ## ros-morse-cpu
+
+[![](https://images.microbadger.com/badges/image/anosnowhong/ros-morse-cpu.svg)](https://microbadger.com/images/anosnowhong/ros-morse-cpu)
+[![](https://images.microbadger.com/badges/version/anosnowhong/ros-morse-cpu.svg)](https://microbadger.com/images/anosnowhong/ros-morse-cpu)
+
 This docker container is based on `ros:kinetic-robot`, include morse and cpu based opengl for graphics visualization.
 
 ## Run
