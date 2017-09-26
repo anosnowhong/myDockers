@@ -14,7 +14,7 @@ RUN git clone https://github.com/morse-simulator/morse.git ~/morse \
 && cd / && rm -rf ~/morse
 
 COPY ./libgl-xlib ~
-RUN wget http://download.blender.org/release/Blender2.78/blender-2.78c-linux-glibc219-x86_64.tar.bz2 /tmp \
+RUN wget -P /tmp http://download.blender.org/release/Blender2.78/blender-2.78c-linux-glibc219-x86_64.tar.bz2 \
 && tar -xvf /tmp/blender-2.78c-linux-glibc219-x86_64.tar.bz2 ~
 
 ENV LD_LIBRARY_PATH=/root/libgl-xlib:$LD_LIBRARY_PATH
