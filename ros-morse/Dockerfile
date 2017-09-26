@@ -7,4 +7,4 @@ git \
 && rm -rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/morse-simulator/morse.git ~/morse \
-&& mkdir ~/morse/build && make install && cd / && rm -rf ~/morse
+&& mkdir ~/morse/build && cmake ..&& make install && cd / && rm -rf ~/morse
