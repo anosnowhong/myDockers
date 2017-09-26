@@ -2,6 +2,8 @@ FROM ros:kinetic-robot
 
 RUN apt-get update && apt-get install -y \
 python3-pip \
+wget \
+tar \
 git \
 && pip3 install setuptools pyyaml catkin_pkg rospkg \
 && rm -rf /var/lib/apt/lists/*
