@@ -50,7 +50,8 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 -D INSTALL_C_EXAMPLES=OFF \
 -D INSTALL_PYTHON_EXAMPLES=ON \
 #-D OPENCV_EXTRA_MODULES_PATH=/root/opencv_contrib/modules \
-#-D BUILD_EXAMPLES=ON .. && \
+#-D BUILD_EXAMPLES=ON 
+.. && \
 
 cd ~/opencv/build && \
 make -j $(nproc) && \
