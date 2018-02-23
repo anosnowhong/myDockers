@@ -11,7 +11,7 @@ libboost1.58-all-dev \
 libflann-dev \
 libeigen3-dev \
 cmake \
-git --no-install-recommends\
+git --no-install-recommends \
 
 # install vtk and opencv dependencies
 libvtk6-dev \
