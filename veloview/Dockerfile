@@ -5,13 +5,6 @@ FROM ubuntu:14.04
 #&& pip3 install setuptools pyyaml catkin_pkg rospkg \
 #&& rm -rf /var/lib/apt/lists/*
 
-# install higher version of cmake
-RUN apt-get update && apt-get install -y wget \
-&& cd /usr \
-&& wget https://cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz \
-&& tar -xzC /usr \
-&& rm -rf cmake-3.5.2-Linux-x86_64.tar.gz
-
 # veloview dependencies
 RUN apt-get update && apt-get install -y \
 cmake-curses-gui \
@@ -29,7 +22,15 @@ byacc \
 # pcl dependencies
 libflann-dev \
 libeigen3-dev \
+# to get binary cmake 3.5
+wget \
+&& cd /usr \
+&& wget https://cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz \
+&& tar -xzC /usr \
+&& rm -rf cmake-3.5.2-Linux-x86_64.tar.gz \
+&& apt-get purge wget -y \
 && rm -rf /var/lib/apt/lists/*
+
 
 # veloview, pcl and pcl plugin for paraview
 RUN apt-get update && apt-get install -y \
