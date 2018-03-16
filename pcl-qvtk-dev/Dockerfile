@@ -11,7 +11,8 @@ libboost1.58-all-dev \
 libflann-dev \
 libeigen3-dev \
 cmake \
-git --no-install-recommends\
+build-essential \
+git --no-install-recommends \
 
 # install vtk and opencv dependencies
 libvtk6-dev \
@@ -50,15 +51,16 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 -D INSTALL_C_EXAMPLES=OFF \
 -D INSTALL_PYTHON_EXAMPLES=ON \
 #-D OPENCV_EXTRA_MODULES_PATH=/root/opencv_contrib/modules \
-#-D BUILD_EXAMPLES=ON .. && \
+#-D BUILD_EXAMPLES=ON 
+.. && \
 
 cd ~/opencv/build && \
 make -j $(nproc) && \
 make install && \
 ldconfig && \
 
-cp ~/opencv/build/lib/cv2.so /usr/local/lib/python2.7/dist-packages/
-
+cp ~/opencv/build/lib/cv2.so /usr/local/lib/python2.7/dist-packages/ && \
+cd ~ && rm -rf ./*
 # step 11
 # RUN cd ~/.virtualenvs/cv/lib/python2.7/site-packages/
 # RUN ln -s /usr/local/lib/python2.7/site-packages/cv2.so cv2.so
