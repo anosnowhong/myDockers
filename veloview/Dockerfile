@@ -21,12 +21,14 @@ libeigen3-dev \
 #libvtk6-dev \
 # to get binary cmake 3.5
 wget \
-&& cd /usr \
+&& rm -rf /var/lib/apt/lists/*
+
+RUN cd /usr \
 && wget https://cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz \
 && tar -xzC /usr \
-&& rm -rf cmake-3.5.2-Linux-x86_64.tar.gz \
-&& apt-get purge wget -y \
-&& rm -rf /var/lib/apt/lists/*
+&& rm -rf cmake-3.5.2-Linux-x86_64.tar.gz 
+#&& apt-get purge wget -y \
+
 
 
 # veloview, pcl and pcl plugin for paraview
