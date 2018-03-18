@@ -42,7 +42,7 @@ git --no-install-recommends \
 # install vtk headers and others
 -DPARAVIEW_INSTALL_DEVELOPMENT_FILEs:BOOL=ON \
 ../veloview/Superbuild \
-&& make -j4 \
+&& make -j $(nproc) \
 && make install \
 
 # add new link to vtk library for pcl to link successfully
@@ -59,7 +59,7 @@ git --no-install-recommends \
 # Rebuild vtk standalone to install header file cause paraview installed has something wrong with Rending...(strange vtkPVLODActor header)
 && cd /root/build-veloview/paraview/src/paraview-build/VTK \
 && cmake ../../paraview/VTK \
-&& make -j4 \
+&& make -j $(nproc) \
 && make install
 
 ## build pcl (pcl is just function as a plugin so the only common part is using same version of vtk)
