@@ -1,10 +1,5 @@
 FROM ubuntu:14.04
 
-#RUN apt-get update && apt-get install -y \
-#python3-pip \
-#&& pip3 install setuptools pyyaml catkin_pkg rospkg \
-#&& rm -rf /var/lib/apt/lists/*
-
 # veloview dependencies
 RUN apt-get update && apt-get install -y \
 cmake-curses-gui \
@@ -22,6 +17,8 @@ byacc \
 # pcl dependencies
 libflann-dev \
 libeigen3-dev \
+# vtk head for pcl
+#libvtk6-dev \
 # to get binary cmake 3.5
 wget \
 && cd /usr \
@@ -39,32 +36,49 @@ git --no-install-recommends \
 # build veloview
 && mkdir /root/build-veloview && cd /root/build-veloview \
 && cmake -DENABLE_veloview:BOOL=ON \
--DENALBE_boost:BOOL=ON \
--DENABLE_python:BOOL=ON \
 -DUSE_SYSTEM_boost:BOOL=ON \
 -DUSE_SYSTEM_python:BOOL=ON \
 -DUSE_SYSTEM_qt:BOOL=ON \
+# install vtk headers and others
+-DPARAVIEW_INSTALL_DEVELOPMENT_FILEs:BOOL=ON \
 ../veloview/Superbuild \
-&& make
+&& make -j4 \
+&& make install \
 
-# build pcl (pcl is just function as a plugin so the only common part is using same version of vtk)
-&& cd /root/veloview
-&& git clone https://github.com/PointCloudLibrary/pcl /root/veloview/pcl \
 # add new link to vtk library for pcl to link successfully
-&& find ./ -type f -name "*-pv5.1*" |while read FILE; do newfile="$(echo ${FILE} | sed -e 's/-pv5.1.so.1/.so/g')"; ln -s ${FILE} ${newfile}; done
-&& mkdir /root/veloview/pcl/build
-&& cd /root/veloview/pcl/build
-&& cmake -DCMAKE_CXX_FLAGS:str=-L/root/build-veloview/install/lib \
-#-DEIGEN_INCLUDE_DIR:str=/root/build-veloview/install/include #for eigen header
--DVTK_DIR:str=/root/build-veloview/paraview/src/paraview-build/VTK
--DBUILD_tools:BOOL=OFF # cause paraview built vtk seems didn't build a module vtkImageViewer2.h
-
-# build pcl plugin
-&& cd /root/veloview \
-&& git clone https://github.com/Kitware/PCLPlugin /root/veloview/PCLPlugin \
-&& mkdir /root/veloview/PCLPlugin/build \
-&& cd /root/veloview/PCLPlugin/build \
-&& make
-
-&& apt-get purge git -y \
+&& cd /root/build-veloview/install/lib/paraview-5.1/ \
+&& find ./ -type f -name "*-pv5.1*" |while read FILE; do newfile="$(echo ${FILE} | sed -e 's/-pv5.1.so.1/.so/g')"; ln -s ${FILE} ${newfile}; done \
+# && cd /root/build-veloview/install/include/paraview-5.1/ \
+# && find ./ -type f -name "*PV*" |while read FILE; do newfile="$(echo ${FILE} | sed -e 's/PV//g')"; ln -s ${FILE} ${newfile}; done \
 && rm -rf /var/lib/apt/lists/*
+
+
+# copy apt get libvtk6-dev header file
+#COPY . /root/build-veloview/install/include/
+
+# Rebuild vtk standalone to install header file cause paraview installed has something wrong with Rending...(strange vtkPVLODActor header)
+&& cd /root/build-veloview/paraview/src/paraview-build/VTK \
+&& cmake ../../paraview/VTK \
+&& make -j4 \
+&& make install
+
+## build pcl (pcl is just function as a plugin so the only common part is using same version of vtk)
+#RUN cd /root/build-veloview \
+#&& git clone https://github.com/PointCloudLibrary/pcl \
+#&& mkdir /root/veloview/pcl/build \
+#&& cd /root/veloview/pcl/build \
+#&& cmake -DVTK_DIR:PATH=/root/build-veloview/paraview/src/paraview-build/VTK \
+##-DCMAKE_CXX_FLAGS:STRING="-L/root/build-veloview/install/lib/paraview-5.1 -I/root/build-veloview/install/include/vtk-6.0" \
+#-DCMAKE_CXX_FLAGS:STRING="-L/root/build-veloview/install/lib/paraview-5.1 -I/usr/local/include/vtk-6.0" \
+## cause paraview built vtk seems didn't build a module vtkImageViewer2.h
+#-DBUILD_tools:BOOL=OFF ..  \
+##-DEIGEN_INCLUDE_DIR:str=/root/build-veloview/install/include #for eigen header
+#&& make -j4 \
+#
+## build pcl plugin
+#&& cd /root/veloview \
+#&& git clone https://github.com/Kitware/PCLPlugin /root/veloview/PCLPlugin \
+#&& mkdir /root/veloview/PCLPlugin/build \
+#&& cd /root/veloview/PCLPlugin/build \
+#&& make
+
