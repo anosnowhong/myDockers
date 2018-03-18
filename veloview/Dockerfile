@@ -20,7 +20,7 @@ libeigen3-dev \
 # vtk head for pcl
 #libvtk6-dev \
 # to get binary cmake 3.5
-wget \
+curl \
 && rm -rf /var/lib/apt/lists/*
 
 RUN curl -sS https://cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz | sudo tar -xzC /usr
