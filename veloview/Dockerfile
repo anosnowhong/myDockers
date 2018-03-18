@@ -23,10 +23,10 @@ libeigen3-dev \
 wget \
 && rm -rf /var/lib/apt/lists/*
 
-RUN cd /usr \
-&& wget https://cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz \
-&& tar -xzC /usr/cmake-3.5.2-Linux-x86_64.tar.gz \
-&& rm -rf cmake-3.5.2-Linux-x86_64.tar.gz 
+RUN curl -sS https://cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz | sudo tar -xzC /usr
+#&& wget https://cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz \
+#&& tar -xzC /usr/cmake-3.5.2-Linux-x86_64.tar.gz \
+#&& rm -rf cmake-3.5.2-Linux-x86_64.tar.gz 
 #&& apt-get purge wget -y \
 
 
