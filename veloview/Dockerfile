@@ -50,7 +50,7 @@ git --no-install-recommends \
 && find ./ -type f -name "*-pv5.1*" |while read FILE; do newfile="$(echo ${FILE} | sed -e 's/-pv5.1.so.1/.so/g')"; ln -s ${FILE} ${newfile}; done \
 # && cd /root/build-veloview/install/include/paraview-5.1/ \
 # && find ./ -type f -name "*PV*" |while read FILE; do newfile="$(echo ${FILE} | sed -e 's/PV//g')"; ln -s ${FILE} ${newfile}; done \
-&& rm -rf /var/lib/apt/lists/*
+&& rm -rf /var/lib/apt/lists/* \
 
 
 # copy apt get libvtk6-dev header file
