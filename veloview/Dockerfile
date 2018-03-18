@@ -42,7 +42,7 @@ git --no-install-recommends \
 -DUSE_SYSTEM_python:BOOL=ON \
 -DUSE_SYSTEM_qt:BOOL=ON \
 # install vtk headers and others
--DPARAVIEW_INSTALL_DEVELOPMENT_FILEs:BOOL=ON \
+#-DPARAVIEW_INSTALL_DEVELOPMENT_FILES:BOOL=ON \
 ../veloview/Superbuild \
 && make -j $(nproc) \
 && make install \
