@@ -44,8 +44,8 @@ git --no-install-recommends \
 # install vtk headers and others
 #-DPARAVIEW_INSTALL_DEVELOPMENT_FILES:BOOL=ON \
 ../veloview/Superbuild \
-&& make -j $(nproc) \
-&& make install \
+&& make -j $(nproc) 
+#&& make install \
 
 # add new link to vtk library for pcl to link successfully
 && cd /root/build-veloview/install/lib/paraview-5.1/ \
