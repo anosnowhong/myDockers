@@ -18,7 +18,7 @@ byacc \
 libflann-dev \
 libeigen3-dev \
 # vtk head for pcl
-#libvtk6-dev \
+libvtk6-dev \
 # to get binary cmake 3.5
 curl \
 && rm -rf /var/lib/apt/lists/*
@@ -59,18 +59,18 @@ git --no-install-recommends \
 && make -j $(nproc) \
 && make install
 
-## build pcl (pcl is just function as a plugin so the only common part is using same version of vtk)
-#RUN cd /root/build-veloview \
-#&& git clone https://github.com/PointCloudLibrary/pcl \
-#&& mkdir /root/veloview/pcl/build \
-#&& cd /root/veloview/pcl/build \
-#&& cmake -DVTK_DIR:PATH=/root/build-veloview/paraview/src/paraview-build/VTK \
-##-DCMAKE_CXX_FLAGS:STRING="-L/root/build-veloview/install/lib/paraview-5.1 -I/root/build-veloview/install/include/vtk-6.0" \
-#-DCMAKE_CXX_FLAGS:STRING="-L/root/build-veloview/install/lib/paraview-5.1 -I/usr/local/include/vtk-6.0" \
+# build pcl (pcl is just function as a plugin so the only common part is using same version of vtk)
+RUN cd /root/build-veloview \
+&& git clone https://github.com/PointCloudLibrary/pcl \
+&& mkdir /root/veloview/pcl/build \
+&& cd /root/veloview/pcl/build \
+&& cmake -DVTK_DIR:PATH=/root/build-veloview/paraview/src/paraview-build/VTK \
+#-DCMAKE_CXX_FLAGS:STRING="-L/root/build-veloview/install/lib/paraview-5.1 -I/root/build-veloview/install/include/vtk-6.2" \
+-DCMAKE_CXX_FLAGS:STRING="-L/root/build-veloview/install/lib/paraview-5.1 -I/usr/include/vtk-6.2" \
 ## cause paraview built vtk seems didn't build a module vtkImageViewer2.h
-#-DBUILD_tools:BOOL=OFF ..  \
+-DBUILD_tools:BOOL=OFF ..  \
 ##-DEIGEN_INCLUDE_DIR:str=/root/build-veloview/install/include #for eigen header
-#&& make -j4 \
+&& make -j4 
 #
 ## build pcl plugin
 #&& cd /root/veloview \
