@@ -25,13 +25,14 @@ wget \
 && rm -rf /var/lib/apt/lists/*
 #RUN curl -sS https://cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz | tar -xzC /usr
 RUN cd /usr \
-&& wget https://cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz \
+&& wget https://cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz --no-check-certificate \
 && tar -xzf cmake-3.5.2-Linux-x86_64.tar.gz --strip=1
 
 # veloview, pcl and pcl plugin for paraview
 RUN apt-get update && apt-get install -y \
-git --no-install-recommends \
-&& git clone https://github.com/Kitware/VeloView  /root/veloview \
+git --no-install-recommends 
+ 
+RUN git clone http://github.com/Kitware/VeloView  /root/veloview \
 # build veloview
 && mkdir /root/build-veloview && cd /root/build-veloview \
 && cmake -DENABLE_veloview:BOOL=ON \
