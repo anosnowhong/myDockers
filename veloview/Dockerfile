@@ -47,29 +47,27 @@ RUN git clone http://github.com/Kitware/VeloView  /root/veloview \
 #&& make install \
 # add new link to vtk library for pcl to link successfully
 && cd /root/build-veloview/install/lib/paraview-5.1/ \
-&& find ./ -type f -name "*-pv5.1*" |while read FILE; do newfile="$(echo ${FILE} | sed -e 's/-pv5.1.so.1/.so/g')"; ln -s ${FILE} ${newfile}; done \
+&& find ./ -type f -name "*-pv5.1*" |while read FILE; do newfile="$(echo ${FILE} | sed -e 's/-pv5.1.so.1/.so/g')"; ln -s ${FILE} ${newfile}; done 
 # && cd /root/build-veloview/install/include/paraview-5.1/ \
 # && find ./ -type f -name "*PV*" |while read FILE; do newfile="$(echo ${FILE} | sed -e 's/PV//g')"; ln -s ${FILE} ${newfile}; done \
-&& rm -rf /var/lib/apt/lists/* \
-# copy apt get libvtk6-dev header file
-#COPY . /root/build-veloview/install/include/
 # Rebuild vtk standalone to install header file cause paraview installed has something wrong with Rending...(strange vtkPVLODActor header)
-&& cd /root/build-veloview/paraview/src/paraview-build/VTK \
-&& cmake ../../paraview/VTK \
-&& make -j $(nproc) \
-&& make install
+#&& cd /root/build-veloview/paraview/src/paraview-build/VTK \
+#&& cmake ../../paraview/VTK \
+#&& make -j $(nproc) \
+#&& make install
 # build pcl (pcl is just function as a plugin so the only common part is using same version of vtk)
 RUN cd /root/build-veloview \
 && git clone https://github.com/PointCloudLibrary/pcl \
-&& mkdir /root/veloview/pcl/build \
-&& cd /root/veloview/pcl/build \
+&& mkdir /root/build-veloview/pcl/build \
+&& cd /root/build-veloview/pcl/build \
+&& git checkout tags/pcl-1.8.1 \
 && cmake -DVTK_DIR:PATH=/root/build-veloview/paraview/src/paraview-build/VTK \
 #-DCMAKE_CXX_FLAGS:STRING="-L/root/build-veloview/install/lib/paraview-5.1 -I/root/build-veloview/install/include/vtk-6.2" \
 -DCMAKE_CXX_FLAGS:STRING="-L/root/build-veloview/install/lib/paraview-5.1 -I/usr/include/vtk-6.2" \
 ## cause paraview built vtk seems didn't build a module vtkImageViewer2.h
 -DBUILD_tools:BOOL=OFF ..  \
 ##-DEIGEN_INCLUDE_DIR:str=/root/build-veloview/install/include #for eigen header
-&& make -j4 
+&& make -j $(nproc) 
 #
 ## build pcl plugin
 #&& cd /root/veloview \
