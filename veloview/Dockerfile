@@ -20,17 +20,18 @@ libeigen3-dev \
 libvtk6-dev \
 # to get binary cmake 3.5
 #curl \
-wget \
---no-install-recommends \
 && rm -rf /var/lib/apt/lists/*
 #RUN curl -sS https://cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz | tar -xzC /usr
 RUN cd /usr \
+&& apt-get update && apt-get install -y \
+git \
+wget \
+--no-install-recommends \
 && wget https://cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz --no-check-certificate \
-&& tar -xzf cmake-3.5.2-Linux-x86_64.tar.gz --strip=1
+&& tar -xzf cmake-3.5.2-Linux-x86_64.tar.gz --strip=1 \
+&& rm -rf /var/lib/apt/lists/*
 
 # veloview, pcl and pcl plugin for paraview
-RUN apt-get update && apt-get install -y \
-git --no-install-recommends 
  
 RUN git clone http://github.com/Kitware/VeloView  /root/veloview \
 # build veloview
