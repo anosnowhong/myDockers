@@ -68,10 +68,10 @@ RUN cd /root/build-veloview \
 -DBUILD_tools:BOOL=OFF ..  \
 ##-DEIGEN_INCLUDE_DIR:str=/root/build-veloview/install/include #for eigen header
 && make -j $(nproc) 
-#
 ## build pcl plugin
-#&& cd /root/veloview \
-#&& git clone https://github.com/Kitware/PCLPlugin /root/veloview/PCLPlugin \
-#&& mkdir /root/veloview/PCLPlugin/build \
-#&& cd /root/veloview/PCLPlugin/build \
-#&& make
+RUN cd /root/build-veloview \
+&& git clone https://github.com/Kitware/PCLPlugin /root/build-veloview/PCLPlugin \
+&& mkdir /root/build-veloview/PCLPlugin/build \
+&& cd /root/build-veloview/PCLPlugin/build \
+&& cmake -DPCL_DIR:STRING=/root/build-veloview/pcl/build -DParaView_DIR:STRING=/root/build-veloview/paraview/src/paraview-build ..\
+&& make -j $(nproc)
