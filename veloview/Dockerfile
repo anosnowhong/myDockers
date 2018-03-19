@@ -1,5 +1,4 @@
 FROM ubuntu:14.04
-
 # veloview dependencies
 RUN apt-get update && apt-get install -y \
 cmake-curses-gui \
@@ -20,11 +19,14 @@ libeigen3-dev \
 # vtk head for pcl
 libvtk6-dev \
 # to get binary cmake 3.5
-curl \
+#curl \
+wget \
+--no-install-recommends \
 && rm -rf /var/lib/apt/lists/*
-
-RUN curl -sS https://cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz | sudo tar -xzC /usr
-
+#RUN curl -sS https://cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz | tar -xzC /usr
+RUN cd /usr \
+&& wget https://cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz \
+&& tar -xzf cmake-3.5.2-Linux-x86_64.tar.gz --strip=1
 
 # veloview, pcl and pcl plugin for paraview
 RUN apt-get update && apt-get install -y \
@@ -41,24 +43,19 @@ git --no-install-recommends \
 ../veloview/Superbuild \
 && make -j $(nproc) \
 #&& make install \
-
 # add new link to vtk library for pcl to link successfully
 && cd /root/build-veloview/install/lib/paraview-5.1/ \
 && find ./ -type f -name "*-pv5.1*" |while read FILE; do newfile="$(echo ${FILE} | sed -e 's/-pv5.1.so.1/.so/g')"; ln -s ${FILE} ${newfile}; done \
 # && cd /root/build-veloview/install/include/paraview-5.1/ \
 # && find ./ -type f -name "*PV*" |while read FILE; do newfile="$(echo ${FILE} | sed -e 's/PV//g')"; ln -s ${FILE} ${newfile}; done \
 && rm -rf /var/lib/apt/lists/* \
-
-
 # copy apt get libvtk6-dev header file
 #COPY . /root/build-veloview/install/include/
-
 # Rebuild vtk standalone to install header file cause paraview installed has something wrong with Rending...(strange vtkPVLODActor header)
 && cd /root/build-veloview/paraview/src/paraview-build/VTK \
 && cmake ../../paraview/VTK \
 && make -j $(nproc) \
 && make install
-
 # build pcl (pcl is just function as a plugin so the only common part is using same version of vtk)
 RUN cd /root/build-veloview \
 && git clone https://github.com/PointCloudLibrary/pcl \
@@ -78,4 +75,3 @@ RUN cd /root/build-veloview \
 #&& mkdir /root/veloview/PCLPlugin/build \
 #&& cd /root/veloview/PCLPlugin/build \
 #&& make
-
